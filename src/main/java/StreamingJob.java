@@ -51,7 +51,7 @@ public class StreamingJob {
                     for (int i = 0; i < jsonElements.size(); i++) {
                         JsonElement element = jsonElements.get(i);
                         Event newEvent = gson.fromJson(element, Event.class);
-                        System.out.println(newEvent);
+                        //System.out.println(newEvent);
                         newList.add(newEvent);
                     }
 
@@ -64,10 +64,16 @@ public class StreamingJob {
         });
 
         String comparaison = "PushEvent";
-        newStreamEvent.filter(event -> Objects.equals(comparaison,event.getType())).print();
+        JavaDStream<Event> FiteredStreamEvent = newStreamEvent.filter(event -> Objects.equals(comparaison,event.getType()));
+
+        FiteredStreamEvent.foreachRDD(eventJavaRDD -> {
+            if(!eventJavaRDD.isEmpty()){
+                eventJavaRDD.collect().forEach(System.out::println);
+            }
+        });
 
         ssc.start();
-        ssc.awaitTermination();
+        ssc.awaitTerminationOrTimeout(5000);
         ssc.close();
     }
 }

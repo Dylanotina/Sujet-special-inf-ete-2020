@@ -1,4 +1,6 @@
-public class Actor {
+import java.io.Serializable;
+
+public class Actor implements Serializable {
     private String login;
     private String url;
 

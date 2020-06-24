@@ -1,6 +1,7 @@
+import java.io.Serializable;
 import java.util.List;
 
-public class Commit {
+public class Commit implements Serializable {
     private String url;
     private String message;
     private Author author;

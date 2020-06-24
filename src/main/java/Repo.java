@@ -1,4 +1,6 @@
-public class Repo {
+import java.io.Serializable;
+
+public class Repo implements Serializable {
     private String name;
     private String url;
 

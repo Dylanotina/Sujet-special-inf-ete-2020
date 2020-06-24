@@ -1,6 +1,7 @@
+import java.io.Serializable;
 import java.util.List;
 
-public class Payload {
+public class Payload implements Serializable {
     private String ref;
     private String head;
     private String before;
