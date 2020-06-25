@@ -45,4 +45,14 @@ public class Payload implements Serializable {
     public void setCommits(List<Commit> commits) {
         this.commits = commits;
     }
+
+    @Override
+    public String toString() {
+        return "Payload{" +
+                "ref='" + ref + '\'' +
+                ", head='" + head + '\'' +
+                ", before='" + before + '\'' +
+                ", commits=" + commits +
+                '}';
+    }
 }

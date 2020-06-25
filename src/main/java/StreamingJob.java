@@ -2,10 +2,15 @@ import com.google.gson.*;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.function.FlatMapFunction;
 import org.apache.spark.api.java.function.Function;
+import org.apache.spark.api.java.function.PairFlatMapFunction;
 import org.apache.spark.streaming.Durations;
 import org.apache.spark.streaming.api.java.JavaDStream;
+import org.apache.spark.streaming.api.java.JavaPairDStream;
 import org.apache.spark.streaming.api.java.JavaReceiverInputDStream;
 import org.apache.spark.streaming.api.java.JavaStreamingContext;
+import scala.Tuple2;
+
+
 import java.util.*;
 
 public class StreamingJob {
@@ -66,11 +71,13 @@ public class StreamingJob {
         String comparaison = "PushEvent";
         JavaDStream<Event> FiteredStreamEvent = newStreamEvent.filter(event -> Objects.equals(comparaison,event.getType()));
 
+
         FiteredStreamEvent.foreachRDD(eventJavaRDD -> {
             if(!eventJavaRDD.isEmpty()){
                 eventJavaRDD.collect().forEach(System.out::println);
             }
         });
+
 
         ssc.start();
         ssc.awaitTerminationOrTimeout(5000);

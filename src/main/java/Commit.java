@@ -35,4 +35,13 @@ public class Commit implements Serializable {
     public void setAuthor(Author author) {
         this.author = author;
     }
+
+    @Override
+    public String toString() {
+        return "Commit{" +
+                "url='" + url + '\'' +
+                ", message='" + message + '\'' +
+                ", author=" + author +
+                '}';
+    }
 }
