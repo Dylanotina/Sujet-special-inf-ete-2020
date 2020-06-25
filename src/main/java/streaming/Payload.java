@@ -1,3 +1,7 @@
+package streaming;
+
+import streaming.Commit;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -46,13 +50,13 @@ public class Payload implements Serializable {
         this.commits = commits;
     }
 
-    @Override
-    public String toString() {
-        return "Payload{" +
+   /*   @Override
+  public String toString() {
+        return "streaming.Payload{" +
                 "ref='" + ref + '\'' +
                 ", head='" + head + '\'' +
                 ", before='" + before + '\'' +
                 ", commits=" + commits +
                 '}';
-    }
+    }*/
 }

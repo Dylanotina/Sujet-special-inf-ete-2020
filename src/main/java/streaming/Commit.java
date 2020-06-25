@@ -1,5 +1,8 @@
+package streaming;
+
+import streaming.Author;
+
 import java.io.Serializable;
-import java.util.List;
 
 public class Commit implements Serializable {
     private String url;
@@ -36,12 +39,12 @@ public class Commit implements Serializable {
         this.author = author;
     }
 
-    @Override
+   /*   @Override
     public String toString() {
-        return "Commit{" +
+        return "streaming.Commit{" +
                 "url='" + url + '\'' +
                 ", message='" + message + '\'' +
                 ", author=" + author +
                 '}';
-    }
+    }*/
 }

@@ -1,8 +1,11 @@
+package streaming;
+
 import java.io.Serializable;
 
 public class Repo implements Serializable {
     private String name;
     private String url;
+    private int id;
 
     public Repo(String name, String url) {
         this.name = name;
@@ -25,11 +28,20 @@ public class Repo implements Serializable {
         this.url = url;
     }
 
-    @Override
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+ /*     @Override
     public String toString() {
-        return "Repo{" +
+        return "streaming.Repo{" +
                 "name='" + name + '\'' +
                 ", url='" + url + '\'' +
+                ", id=" + id +
                 '}';
-    }
+    }*/
 }

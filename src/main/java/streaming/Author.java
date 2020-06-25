@@ -1,3 +1,5 @@
+package streaming;
+
 import java.io.Serializable;
 
 public class Author implements Serializable {
@@ -27,7 +29,7 @@ public class Author implements Serializable {
 
     @Override
     public String toString() {
-        return "Author{" +
+        return "streaming.Author{" +
                 "email='" + email + '\'' +
                 ", name='" + name + '\'' +
                 '}';

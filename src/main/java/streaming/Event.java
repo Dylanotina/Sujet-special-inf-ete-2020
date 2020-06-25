@@ -1,5 +1,6 @@
+package streaming;
+
 import java.io.Serializable;
-import java.util.List;
 import java.util.Objects;
 
 public class Event implements Serializable {
@@ -59,7 +60,7 @@ public Actor getActor() {
 
     @Override
     public String toString() {
-        return "Event{" +
+        return "streaming.Event{" +
                 "id='" + id + '\'' +
                 ", type='" + type + '\'' +
                 ", actor=" + actor +

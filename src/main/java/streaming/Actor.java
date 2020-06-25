@@ -1,3 +1,5 @@
+package streaming;
+
 import java.io.Serializable;
 
 public class Actor implements Serializable {
@@ -25,11 +27,11 @@ public class Actor implements Serializable {
         this.url = url;
     }
 
-    @Override
+   /* @Override
     public String toString() {
-        return "Actor{" +
+        return "streaming.Actor{" +
                 "login='" + login + '\'' +
                 ", url='" + url + '\'' +
                 '}';
-    }
+    }*/
 }
