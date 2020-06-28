@@ -11,28 +11,31 @@ import org.apache.spark.streaming.api.java.JavaReceiverInputDStream;
 import org.apache.spark.streaming.api.java.JavaStreamingContext;
 
 
+import java.lang.annotation.Documented;
 import java.util.*;
 
 public class StreamingJob {
     public static void main(String[] args) throws Exception {
+
+        //  Creation du contexte pour le stream
+
         SparkConf sparkConf = new SparkConf().setAppName("streaming.StreamingJob").setMaster("local");
         JavaStreamingContext ssc = new JavaStreamingContext(sparkConf, Durations.seconds(5));
 
+        //  Creation de la connexion à la base de données et ajout des adresses http pour l'api Github
+
         CRUD crud = new CRUD();
         String[] adresses = new String[11];
-
-
         for(int i = 0; i<11; i++){
             String addAdresse = "https://api.github.com/events?page="+i;
           adresses[i] = addAdresse;
         }
 
+
+        //  Reception des données et création d'un tableau d'elements JSON
+
         JavaReceiverInputDStream<String> test  = ssc.receiverStream(new DataReceiver(adresses));
         JavaDStream<String> newString = test.map(s -> "["+s+"]");
-
-
-
-
        JavaDStream<JsonArray> newJsonArray = newString.map(new Function<String, JsonArray>() {
             @Override
             public JsonArray call(String s) throws Exception {
@@ -48,10 +51,13 @@ public class StreamingJob {
             }
         });
 
+
+       //   On convertit le tableau d'elements JSON en Liste d'Events
+
         JavaDStream<Event> newStreamEvent = newJsonArray.flatMap(new FlatMapFunction<JsonArray, Event>() {
             @Override
             public Iterator<Event> call(JsonArray jsonElements) throws Exception {
-                Set<Event> newList = new HashSet<>();
+                List<Event> newList = new ArrayList<>();
                 try {
                     Gson gson = new Gson();
                     for (int i = 0; i < jsonElements.size(); i++) {
@@ -68,9 +74,14 @@ public class StreamingJob {
             }
         });
 
+
+        //  On filtre les résultats pour avoir que les "PushEvent"
+
         String comparaison = "PushEvent";
         JavaDStream<Event> FiteredStreamEvent = newStreamEvent.filter(event -> Objects.equals(comparaison,event.getType()));
 
+
+        //  A partir de chaque Event, on va les créer et les ajouter dans la base de données
 
         FiteredStreamEvent.foreachRDD(eventJavaRDD -> {
             if(!eventJavaRDD.isEmpty()){
