@@ -20,7 +20,7 @@ public class StreamingJob {
         //  Creation du contexte pour le stream
 
         SparkConf sparkConf = new SparkConf().setAppName("streaming.StreamingJob").setMaster("local");
-        JavaStreamingContext ssc = new JavaStreamingContext(sparkConf, Durations.seconds(5));
+        JavaStreamingContext ssc = new JavaStreamingContext(sparkConf, Durations.seconds(1));
 
         //  Creation de la connexion à la base de données et ajout des adresses http pour l'api Github
 
@@ -97,7 +97,7 @@ public class StreamingJob {
 
 
         ssc.start();
-        ssc.awaitTerminationOrTimeout(10000);
+        ssc.awaitTerminationOrTimeout(25000);
         ssc.close();
         crud.ReadAll();
 
