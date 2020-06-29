@@ -84,15 +84,14 @@ public class StreamingJob {
         FiteredStreamEvent.foreachRDD(eventJavaRDD -> {
        while (!eventJavaRDD.isEmpty()){
            try {
-               //eventJavaRDD.collect().forEach(crud::Create);
-               eventJavaRDD.collect().forEach(System.out::println);
+               eventJavaRDD.collect().forEach(crud::Create);
            }catch (Exception e){
                System.out.println(e.getMessage());
            }
        }
         });
 
-
+        crud.ReadAll();
 
         ssc.start();
         ssc.awaitTermination();
