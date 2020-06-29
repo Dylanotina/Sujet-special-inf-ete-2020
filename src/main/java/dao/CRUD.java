@@ -26,16 +26,18 @@ public class CRUD {
     }
 
     public void Create(Event event){
-        Bson filters = Filters.eq("repo_id",event.getRepo().getId());
         Bson filtersIdEvent = Filters.eq("id",event.getId());
-        if (collection.countDocuments(filters)!= 0 && (collection.countDocuments(filtersIdEvent) == 0)){
-        collection.updateOne(filters,inc("count",1));
-    }else if (collection.countDocuments(filtersIdEvent) == 0){
-        Document doc = new Document("titre",event.getRepo().getName()).append("id",event.getId()).append("type",event.getType())
-                .append("repo_id",event.getRepo().getId())
-                .append("count",1);
-        collection.insertOne(doc);
-    }
+        if(collection.countDocuments(filtersIdEvent)==0){
+            Bson filters = Filters.eq("repo_id",event.getRepo().getId());
+            if (collection.countDocuments(filters)!= 0){
+                update(event);
+            }else {
+                Document doc = new Document("titre",event.getRepo().getName()).append("id",event.getId()).append("type",event.getType())
+                        .append("repo_id",event.getRepo().getId())
+                        .append("count",1);
+                collection.insertOne(doc);
+            }
+        }
     }
 
     public void ReadAll(){
@@ -46,8 +48,9 @@ public class CRUD {
 
     }
 
-    public void update(){
-
+    public void update(Event event){
+        Bson filters = Filters.eq("repo_id",event.getRepo().getId());
+        collection.updateOne(filters,inc("count",1));
     }
 
     public void delete(){
