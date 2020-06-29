@@ -25,6 +25,7 @@ public class StreamingJob {
         //  Creation de la connexion à la base de données et ajout des adresses http pour l'api Github
 
         CRUD crud = new CRUD();
+        //crud.delete();
         String[] adresses = new String[11];
         for(int i = 0; i<11; i++){
             String addAdresse = "https://api.github.com/events?page="+i;
@@ -57,7 +58,7 @@ public class StreamingJob {
         JavaDStream<Event> newStreamEvent = newJsonArray.flatMap(new FlatMapFunction<JsonArray, Event>() {
             @Override
             public Iterator<Event> call(JsonArray jsonElements) throws Exception {
-                List<Event> newList = new ArrayList<>();
+                Set<Event> newList = new HashSet<>();
                 try {
                     Gson gson = new Gson();
                     for (int i = 0; i < jsonElements.size(); i++) {
@@ -82,20 +83,25 @@ public class StreamingJob {
 
 
         //  A partir de chaque Event, on va les créer et les ajouter dans la base de données
-
+        //System.out.println("\n Events filtrés : \n");
         FiteredStreamEvent.foreachRDD(eventJavaRDD -> {
-            if(!eventJavaRDD.isEmpty()){
-                eventJavaRDD.collect().forEach(System.out::println);
-                eventJavaRDD.collect().forEach(crud::Create);
-
-            }
+       while (!eventJavaRDD.isEmpty()){
+           try {
+               eventJavaRDD.collect().forEach(crud::Create);
+           }catch (Exception e){
+               System.out.println(e.getMessage());
+           }
+       }
         });
 
 
 
         ssc.start();
-        ssc.awaitTerminationOrTimeout(3600000);
+        ssc.awaitTerminationOrTimeout(10000);
         ssc.close();
+        crud.ReadAll();
+
+
     }
 }
 
