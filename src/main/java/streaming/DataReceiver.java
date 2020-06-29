@@ -15,7 +15,7 @@ import java.util.Base64;
 
 public class DataReceiver extends Receiver<String> {
     private String[] urls;
-
+    private String SECRET_KEY = "va dans cle.txt avant pour mettre la clé secrete";
     private int iterator = 0;
 
     public DataReceiver(String[] receivingURls) {
@@ -32,15 +32,15 @@ public class DataReceiver extends Receiver<String> {
     }
 
     private void receive(){
-        boolean keepOnRunning = true;
-        while (keepOnRunning){
+
+        for(int i =0; i<this.urls.length; i++){
             String dataString = this.urls[iterator];
             try {
                 // Creation de la connexion à l'api + authentification
 
                 URL data = new URL(dataString);
                 HttpURLConnection dataUrlConnection = (HttpURLConnection) data.openConnection();
-                String basicCredentials = "Dylanotina:ae7464181e94cc701a75812939bbf4634e9e9ba3";
+                String basicCredentials = "Dylanotina:"+SECRET_KEY;
                 String BasicAuth = "Basic " + Base64.getEncoder().encodeToString(basicCredentials.getBytes(StandardCharsets.UTF_8));
                 dataUrlConnection.setRequestProperty("Authorization",BasicAuth);
                 InputStream is = dataUrlConnection.getInputStream();
@@ -58,38 +58,29 @@ public class DataReceiver extends Receiver<String> {
 
                     }
                 } catch (IOException ioe) {
-                    keepOnRunning = false;
                     ioe.printStackTrace();
                 }
+                if (iterator ==10){
+                    iterator = 0;
+                    Thread.sleep(10000);
+                    stop("fin");
 
-                if (iterator == 10){
-                    try {
-                        iterator = 0;
-                        Thread.sleep(10000);
-                    }catch (InterruptedException err){
-                        keepOnRunning = false;
-                        err.printStackTrace();
-                    }
+
                 }else {
                     iterator++;
                 }
 
-                try {
-                    Thread.sleep(1000);
-                }catch (InterruptedException err){
-                    keepOnRunning = false;
-                    err.printStackTrace();
-                }
 
 
             }catch (MalformedURLException e){
-                keepOnRunning = false;
                 System.out.println("Erreur sur l'adresse" + e);
             }catch (IOException err){
-                keepOnRunning = false;
                 System.out.println(err.getMessage());
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
-        }
 
+        }
+        //restart("Reload data");
     }
 }

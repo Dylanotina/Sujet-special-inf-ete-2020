@@ -15,13 +15,15 @@ import static com.mongodb.client.model.Updates.inc;
 
 public class CRUD {
     private MongoCollection<Document> collection;
+    private MongoClient mongoClient;
+    private MongoDatabase database;
 
     public CRUD() {
         MongoClientURI uri = new MongoClientURI(
                 "mongodb+srv://didi:Didibasketnba17@portofolio-cluster-tugso.mongodb.net/Sujet_special?retryWrites=true&w=majority");
 
-        MongoClient mongoClient = new MongoClient(uri);
-        MongoDatabase database = mongoClient.getDatabase("Sujet_special");
+         mongoClient = new MongoClient(uri);
+         database = mongoClient.getDatabase("Sujet_special");
          collection = database.getCollection("Events");
     }
 

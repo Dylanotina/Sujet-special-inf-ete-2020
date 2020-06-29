@@ -10,8 +10,6 @@ import org.apache.spark.streaming.api.java.JavaDStream;
 import org.apache.spark.streaming.api.java.JavaReceiverInputDStream;
 import org.apache.spark.streaming.api.java.JavaStreamingContext;
 
-
-import java.lang.annotation.Documented;
 import java.util.*;
 
 public class StreamingJob {
@@ -19,13 +17,12 @@ public class StreamingJob {
 
         //  Creation du contexte pour le stream
 
-        SparkConf sparkConf = new SparkConf().setAppName("streaming.StreamingJob").setMaster("local");
-        JavaStreamingContext ssc = new JavaStreamingContext(sparkConf, Durations.seconds(1));
+        SparkConf sparkConf = new SparkConf().setAppName("streaming.StreamingJob").setMaster("local[2]").set("spark.cores.max","4");
+        JavaStreamingContext ssc = new JavaStreamingContext(sparkConf, Durations.seconds(10));
 
         //  Creation de la connexion à la base de données et ajout des adresses http pour l'api Github
 
         CRUD crud = new CRUD();
-        //crud.delete();
         String[] adresses = new String[11];
         for(int i = 0; i<11; i++){
             String addAdresse = "https://api.github.com/events?page="+i;
@@ -83,11 +80,12 @@ public class StreamingJob {
 
 
         //  A partir de chaque Event, on va les créer et les ajouter dans la base de données
-        //System.out.println("\n Events filtrés : \n");
+
         FiteredStreamEvent.foreachRDD(eventJavaRDD -> {
        while (!eventJavaRDD.isEmpty()){
            try {
-               eventJavaRDD.collect().forEach(crud::Create);
+               //eventJavaRDD.collect().forEach(crud::Create);
+               eventJavaRDD.collect().forEach(System.out::println);
            }catch (Exception e){
                System.out.println(e.getMessage());
            }
@@ -97,9 +95,11 @@ public class StreamingJob {
 
 
         ssc.start();
-        ssc.awaitTerminationOrTimeout(25000);
-        ssc.close();
-        crud.ReadAll();
+        ssc.awaitTermination();
+
+
+
+
 
 
     }
