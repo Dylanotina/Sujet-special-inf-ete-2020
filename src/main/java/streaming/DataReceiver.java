@@ -15,7 +15,7 @@ import java.util.Base64;
 
 public class DataReceiver extends Receiver<String> {
     private String[] urls;
-    private String SECRET_KEY = "va dans cle.txt avant pour mettre la clé secrete";
+    private String SECRET_KEY = "f67adce4c82de2bb7f4d174bcf2d65b582a89859";
     private int iterator = 0;
 
     public DataReceiver(String[] receivingURls) {

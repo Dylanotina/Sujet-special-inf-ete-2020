@@ -1,21 +1,17 @@
 package streaming;
 
-import streaming.Commit;
-
 import java.io.Serializable;
-import java.util.List;
 
 public class Payload implements Serializable {
     private String ref;
     private String head;
     private String before;
-    private List<Commit> commits;
 
-    public Payload(String ref, String head, String before, List<Commit> commits) {
+
+    public Payload(String ref, String head, String before) {
         this.ref = ref;
         this.head = head;
         this.before = before;
-        this.commits = commits;
     }
 
     public String getRef() {
@@ -42,13 +38,6 @@ public class Payload implements Serializable {
         this.before = before;
     }
 
-    public List<Commit> getCommits() {
-        return commits;
-    }
-
-    public void setCommits(List<Commit> commits) {
-        this.commits = commits;
-    }
 
    /*   @Override
   public String toString() {

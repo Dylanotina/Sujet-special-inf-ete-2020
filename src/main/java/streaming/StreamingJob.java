@@ -3,8 +3,13 @@ package streaming;
 import com.google.gson.*;
 import dao.CRUD;
 import org.apache.spark.SparkConf;
+import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.function.FlatMapFunction;
 import org.apache.spark.api.java.function.Function;
+import org.apache.spark.sql.Dataset;
+import org.apache.spark.sql.Row;
+import org.apache.spark.sql.SaveMode;
+import org.apache.spark.sql.SparkSession;
 import org.apache.spark.streaming.Durations;
 import org.apache.spark.streaming.api.java.JavaDStream;
 import org.apache.spark.streaming.api.java.JavaReceiverInputDStream;
@@ -17,12 +22,13 @@ public class StreamingJob {
 
         //  Creation du contexte pour le stream
 
-        SparkConf sparkConf = new SparkConf().setAppName("streaming.StreamingJob").setMaster("local[2]").set("spark.cores.max","4");
+        SparkConf sparkConf = new SparkConf().setAppName("streaming.StreamingJob").setMaster("local[2]").set("spark.cores.max","2");
         JavaStreamingContext ssc = new JavaStreamingContext(sparkConf, Durations.seconds(10));
+        SparkSession spark = SparkSession.builder().getOrCreate();
 
         //  Creation de la connexion à la base de données et ajout des adresses http pour l'api Github
 
-        CRUD crud = new CRUD();
+
         String[] adresses = new String[11];
         for(int i = 0; i<11; i++){
             String addAdresse = "https://api.github.com/events?page="+i;
@@ -79,20 +85,29 @@ public class StreamingJob {
         JavaDStream<Event> FiteredStreamEvent = newStreamEvent.filter(event -> Objects.equals(comparaison,event.getType()));
 
 
-        //  A partir de chaque Event, on va les créer et les ajouter dans la base de données
+        JavaDStream<EventForDF> FinalStream = FiteredStreamEvent.flatMap(new FlatMapFunction<Event, EventForDF>() {
+            @Override
+            public Iterator<EventForDF> call(Event event) throws Exception {
+                Set<EventForDF> newList = new HashSet<>();
+                EventForDF newEvent = new EventForDF(event.getId(),event.getType(),event.getRepo().getName(),event.getRepo().getId(),event.getActor().getLogin());
+                newList.add(newEvent);
+                return newList.iterator();
+            }
+        });
 
-        FiteredStreamEvent.foreachRDD(eventJavaRDD -> {
+        //  A partir de chaque Event, on va les créer et les ajouter dans la base de données
+        String file ="data.csv";
+
+        FinalStream.foreachRDD(eventJavaRDD -> {
        while (!eventJavaRDD.isEmpty()){
            try {
-               eventJavaRDD.collect().forEach(crud::Create);
+               Dataset<Row> EventDF = spark.createDataFrame(eventJavaRDD,EventForDF.class);
+               EventDF.write().mode(SaveMode.Ignore).csv(file);
            }catch (Exception e){
                System.out.println(e.getMessage());
            }
        }
         });
-
-        crud.ReadAll();
-
         ssc.start();
         ssc.awaitTermination();
 
