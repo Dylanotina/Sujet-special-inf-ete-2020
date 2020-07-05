@@ -1,7 +1,6 @@
 package streaming;
 
 import com.google.gson.*;
-import dao.CRUD;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.function.FlatMapFunction;
@@ -23,7 +22,7 @@ public class StreamingJob {
         //  Creation du contexte pour le stream
 
         SparkConf sparkConf = new SparkConf().setAppName("streaming.StreamingJob").setMaster("local[2]").set("spark.cores.max","2");
-        JavaStreamingContext ssc = new JavaStreamingContext(sparkConf, Durations.seconds(10));
+        JavaStreamingContext ssc = new JavaStreamingContext(sparkConf, Durations.seconds(20));
         SparkSession spark = SparkSession.builder().getOrCreate();
 
         //  Creation de la connexion à la base de données et ajout des adresses http pour l'api Github
@@ -96,22 +95,20 @@ public class StreamingJob {
         });
 
         //  A partir de chaque Event, on va les créer et les ajouter dans la base de données
-        String file ="data.csv";
+        String file ="data";
+
+
 
         FinalStream.foreachRDD(eventJavaRDD -> {
-       while (!eventJavaRDD.isEmpty()){
-           try {
-               Dataset<Row> EventDF = spark.createDataFrame(eventJavaRDD,EventForDF.class);
-               EventDF.write().mode(SaveMode.Ignore).csv(file);
-           }catch (Exception e){
-               System.out.println(e.getMessage());
-           }
+       if (!eventJavaRDD.isEmpty()){
+           Dataset<Row> EventDF = spark.createDataFrame(eventJavaRDD,EventForDF.class);
+           EventDF.write().mode(SaveMode.Append).format("csv").save(file);
        }
         });
+
+
         ssc.start();
-        ssc.awaitTermination();
-
-
+        ssc.awaitTerminationOrTimeout(600000);
 
 
 

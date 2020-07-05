@@ -15,7 +15,7 @@ import java.util.Base64;
 
 public class DataReceiver extends Receiver<String> {
     private String[] urls;
-    private String SECRET_KEY = "f67adce4c82de2bb7f4d174bcf2d65b582a89859";
+    private String SECRET_KEY = "0075a2ef61d4822dc13ebc1bd1802d9559d6327e";
     private int iterator = 0;
 
     public DataReceiver(String[] receivingURls) {
