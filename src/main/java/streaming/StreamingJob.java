@@ -2,7 +2,6 @@ package streaming;
 
 import com.google.gson.*;
 import org.apache.spark.SparkConf;
-import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.function.FlatMapFunction;
 import org.apache.spark.api.java.function.Function;
 import org.apache.spark.sql.Dataset;
@@ -21,7 +20,7 @@ public class StreamingJob {
 
         //  Creation du contexte pour le stream
 
-        SparkConf sparkConf = new SparkConf().setAppName("streaming.StreamingJob").setMaster("local[2]").set("spark.cores.max","2");
+        SparkConf sparkConf = new SparkConf().setAppName("streaming.StreamingJob").setMaster("local[2]").set("spark.cores.max","4");
         JavaStreamingContext ssc = new JavaStreamingContext(sparkConf, Durations.seconds(20));
         SparkSession spark = SparkSession.builder().getOrCreate();
 
@@ -108,7 +107,7 @@ public class StreamingJob {
 
 
         ssc.start();
-        ssc.awaitTerminationOrTimeout(600000);
+        ssc.awaitTerminationOrTimeout(3600000);
 
 
 
