@@ -18,6 +18,6 @@ public class Analyse {
         Dataset<Row> sqlDF = spark.sql("SELECT id_repo, titre_repo, type, COUNT (id_event) FROM Events GROUP BY titre_repo, type, id_repo HAVING COUNT(titre_repo)>0 ORDER BY 4 DESC ");
         sqlDF.show(false);
         System.out.println("Nombre d'événements récupérées sur 1h: "+sqlDF.count());
-        //System.out.println("Nombre d'événements récupérées sur 1h: "+changeNames.count());
+
     }
 }

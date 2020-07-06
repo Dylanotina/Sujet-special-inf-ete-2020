@@ -106,7 +106,7 @@ public class StreamingJob {
 
 
         ssc.start();
-        ssc.awaitTerminationOrTimeout(3600000);
+        ssc.awaitTerminationOrTimeout(Long.parseLong(args[0]));
 
 
 
