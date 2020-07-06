@@ -1,4 +1,4 @@
-package streaming;
+package model;
 
 import java.io.Serializable;
 
@@ -38,7 +38,7 @@ public class Repo implements Serializable {
 
  /*     @Override
     public String toString() {
-        return "streaming.Repo{" +
+        return "model.Repo{" +
                 "name='" + name + '\'' +
                 ", url='" + url + '\'' +
                 ", id=" + id +

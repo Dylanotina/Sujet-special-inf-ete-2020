@@ -1,4 +1,4 @@
-package streaming;
+package model;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -60,7 +60,7 @@ public Actor getActor() {
 
     @Override
     public String toString() {
-        return "streaming.Event{" +
+        return "model.Event{" +
                 "id='" + id + '\'' +
                 ", type='" + type + '\'' +
                 ", actor=" + actor +

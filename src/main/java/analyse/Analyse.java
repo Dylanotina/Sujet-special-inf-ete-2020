@@ -10,10 +10,14 @@ public class Analyse {
         spark.sparkContext().setLogLevel("OFF");
          Dataset<Row>  df =spark.read().format("csv").option("headers","true").load("/Users/aboudramanetraore/IdeaProjects/Sujet-special-inf-ete-2020/data/*.csv");
         Dataset<Row> show = df.dropDuplicates("_c0").orderBy("_c2");
-        show.createOrReplaceTempView("Events");
-        Dataset<Row> sqlDF = spark.sql("SELECT _c1, _c3, _c4, COUNT (_c0) FROM Events GROUP BY _c3, _c4, _c1 HAVING COUNT(_c3)>0 ORDER BY 4 DESC ");
-        sqlDF.show(50);
-        System.out.println(sqlDF.count());
+        Dataset<Row> changeNames = show.withColumnRenamed("_c3","titre_repo")
+                .withColumnRenamed("_c4","type").withColumnRenamed("_c1","id_repo")
+                .withColumnRenamed("_c0","id_event");
+
+        changeNames.createOrReplaceTempView("Events");
+        Dataset<Row> sqlDF = spark.sql("SELECT id_repo, titre_repo, type, COUNT (id_event) FROM Events GROUP BY titre_repo, type, id_repo HAVING COUNT(titre_repo)>0 ORDER BY 4 DESC ");
+        sqlDF.show();
+        System.out.println("Nombre d'événements récupérées sur 1h: "+sqlDF.count());
 
     }
 }

@@ -7,9 +7,9 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Sorts;
+import model.Event;
 import org.bson.Document;
 import org.bson.conversions.Bson;
-import streaming.*;
 
 import static com.mongodb.client.model.Updates.inc;
 

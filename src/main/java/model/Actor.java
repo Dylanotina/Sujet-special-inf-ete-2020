@@ -1,4 +1,4 @@
-package streaming;
+package model;
 
 import java.io.Serializable;
 
@@ -29,7 +29,7 @@ public class Actor implements Serializable {
 
    /* @Override
     public String toString() {
-        return "streaming.Actor{" +
+        return "model.Actor{" +
                 "login='" + login + '\'' +
                 ", url='" + url + '\'' +
                 '}';

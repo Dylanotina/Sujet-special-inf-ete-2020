@@ -1,4 +1,4 @@
-package streaming;
+package model;
 
 import java.io.Serializable;
 
@@ -41,7 +41,7 @@ public class Payload implements Serializable {
 
    /*   @Override
   public String toString() {
-        return "streaming.Payload{" +
+        return "model.Payload{" +
                 "ref='" + ref + '\'' +
                 ", head='" + head + '\'' +
                 ", before='" + before + '\'' +

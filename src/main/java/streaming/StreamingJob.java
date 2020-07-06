@@ -1,6 +1,7 @@
 package streaming;
 
 import com.google.gson.*;
+import model.*;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.function.FlatMapFunction;
 import org.apache.spark.api.java.function.Function;
@@ -95,8 +96,6 @@ public class StreamingJob {
 
         //  A partir de chaque Event, on va les créer et les ajouter dans la base de données
         String file ="data";
-
-
 
         FinalStream.foreachRDD(eventJavaRDD -> {
        if (!eventJavaRDD.isEmpty()){
