@@ -1,7 +1,7 @@
 # Sujet-special-inf-ete-2020
 
 # Configuration
-Le projet se déroule avec 2 coeurs, 1 worker et 1 driver.
+Le projet se déroule avec 2 coeurs, 1 worker et 1 driver en Local.
 J'ai travaillé sur un MacBook Air de 2015 donc une config assez vieille, il est possible de changer la config pour améliorer la performance du programme.
 
 # Lancement du programme

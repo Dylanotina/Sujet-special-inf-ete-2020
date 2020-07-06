@@ -2,14 +2,14 @@ package model;
 
 import java.io.Serializable;
 
-public class EventForDF implements Serializable {
+public class EventDF implements Serializable {
     private String id;
     private String type;
     private String titre_repo;
     private int id_repo;
     private String login;
 
-    public EventForDF(String id, String type, String titre_repo, int id_repo, String login) {
+    public EventDF(String id, String type, String titre_repo, int id_repo, String login) {
         this.id = id;
         this.type = type;
         this.titre_repo = titre_repo;

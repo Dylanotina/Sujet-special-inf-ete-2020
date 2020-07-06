@@ -84,11 +84,11 @@ public class StreamingJob {
         JavaDStream<Event> FiteredStreamEvent = newStreamEvent.filter(event -> Objects.equals(comparaison,event.getType()));
 
 
-        JavaDStream<EventForDF> FinalStream = FiteredStreamEvent.flatMap(new FlatMapFunction<Event, EventForDF>() {
+        JavaDStream<EventDF> FinalStream = FiteredStreamEvent.flatMap(new FlatMapFunction<Event, EventDF>() {
             @Override
-            public Iterator<EventForDF> call(Event event) throws Exception {
-                Set<EventForDF> newList = new HashSet<>();
-                EventForDF newEvent = new EventForDF(event.getId(),event.getType(),event.getRepo().getName(),event.getRepo().getId(),event.getActor().getLogin());
+            public Iterator<EventDF> call(Event event) throws Exception {
+                Set<EventDF> newList = new HashSet<>();
+                EventDF newEvent = new EventDF(event.getId(),event.getType(),event.getRepo().getName(),event.getRepo().getId(),event.getActor().getLogin());
                 newList.add(newEvent);
                 return newList.iterator();
             }
@@ -99,7 +99,7 @@ public class StreamingJob {
 
         FinalStream.foreachRDD(eventJavaRDD -> {
        if (!eventJavaRDD.isEmpty()){
-           Dataset<Row> EventDF = spark.createDataFrame(eventJavaRDD,EventForDF.class);
+           Dataset<Row> EventDF = spark.createDataFrame(eventJavaRDD, model.EventDF.class);
            EventDF.write().mode(SaveMode.Append).format("csv").save(file);
        }
         });
