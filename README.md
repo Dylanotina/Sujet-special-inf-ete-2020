@@ -10,7 +10,3 @@ Il faut d'abord lancer le service StreamingJob.java et le laisser tourner pour p
 Ensuite, il faut lancer le service Analyse.java qui va nous permettre d'afficher les données et de nous permettre de les analyser.
 Pour cela j'ai crée un Launcher.java qui va lancer ces deux classes.
 
-# Sécurité
-
-Le programme demande une authentification à Github en créant une clé personnelle.
-Celle que j'ai placé dans le code envoyé n'est plus valable, il faut la changer et la remplacer par une nouvelle clé. 

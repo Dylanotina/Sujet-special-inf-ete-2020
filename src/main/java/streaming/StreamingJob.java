@@ -90,6 +90,7 @@ public class StreamingJob {
                 Set<EventDF> newList = new HashSet<>();
                 EventDF newEvent = new EventDF(event.getId(),event.getType(),event.getRepo().getName(),event.getRepo().getId(),event.getActor().getLogin());
                 newList.add(newEvent);
+                System.out.println(newEvent.toString());
                 return newList.iterator();
             }
         });
@@ -99,8 +100,9 @@ public class StreamingJob {
 
         FinalStream.foreachRDD(eventJavaRDD -> {
        if (!eventJavaRDD.isEmpty()){
-           Dataset<Row> EventDF = spark.createDataFrame(eventJavaRDD, model.EventDF.class);
-           EventDF.write().mode(SaveMode.Append).format("csv").save(file);
+           //Dataset<Row> EventDF = spark.createDataFrame(eventJavaRDD, model.EventDF.class);
+           //EventDF.write().mode(SaveMode.Append).format("csv").save(file);
+           eventJavaRDD.coalesce(1,true).saveAsTextFile("data.csv");
        }
         });
 

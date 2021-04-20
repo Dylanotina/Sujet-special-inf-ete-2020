@@ -1,7 +1,8 @@
 package streaming;
 
-import org.apache.spark.storage.StorageLevel;
 import org.apache.spark.streaming.receiver.Receiver;
+import org.apache.spark.storage.StorageLevel;
+
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -15,7 +16,7 @@ import java.util.Base64;
 
 public class DataReceiver extends Receiver<String> {
     private String[] urls;
-    private String SECRET_KEY = "0075a2ef61d4822dc13ebc1bd1802d9559d6327e";
+    private String SECRET_KEY = System.getenv("GITHUB_API_KEY");
     private int iterator = 0;
 
     public DataReceiver(String[] receivingURls) {
